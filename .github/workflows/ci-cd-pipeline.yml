@@ -1,0 +1,55 @@
+name: CI/CD Pipeline for SAP BTP iFlows using Kyma
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 2. Set up Docker (if using Docker for iFlow containerization)
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v1
+
+      # 3. Build Docker image (if containerized)
+      - name: Build Docker image
+        run: |
+          docker build -t shimeerh14/sap_cicd .
+
+      # 4. Log in to Docker registry
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 5. Push Docker image to registry (if containerized)
+      - name: Push Docker image
+        run: |
+          docker push shimeerh14/sap_cicd
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      # 1. Set up kubectl to interact with Kyma
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v1
+        with:
+          kubeconfig: ${{ secrets.KYMA_KUBECONFIG }}
+
+      # 2. Deploy to Kyma cluster
+      - name: Deploy iFlow to Kyma
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+          kubectl rollout status deployment/iflow-deployment
