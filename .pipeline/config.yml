@@ -5,22 +5,49 @@ general:
 service:
   buildToolVersion: "MVNJ21"
 stages:
-  - name: "Checkout"
+  # 1. Checkout Stage
+  - name: "Checkout Source"
     type: "git"
     repo: "https://github.com/shimeeh14/sap_cicd.git"
     branch: "main"
+    credentialsId: "github"   # reference to stored Git credentials in CI/CD service
 
-  - name: "Build"
+  # 2. Build Stage (Optional if using Maven)
+  - name: "Build iFlow"
     type: "maven"
-    command: "mvn clean install"
+    mavenGoals: "clean install"
+    workingDirectory: "iflows/customer-order"
+    dockerImage: "maven:3.9.4-eclipse-temurin-17"  # ensure Java 17 if Groovy scripts need it
 
+  # 3. Unit Tests (Groovy / Java tests)
   - name: "Unit Tests"
     type: "maven"
-    command: "mvn test"
+    mavenGoals: "test"
+    workingDirectory: "demo_Iflow"
 
-  - name: "Deploy to Dev"
+
+  # 5. Deploy to Integration Suite (Dev tenant)
+  - name: "Deploy iFlow - Dev"
     type: "integrationSuiteDeploy"
     parameters:
-      host: "https://dev-i77t4c8n.integrationsuite-trial.cfapps.us10-001.hana.ondemand.com/"
+      host: "https://<dev-tenant>.integration-suite.cfapps.<region>.hana.ondemand.com"
       username: "${{ secrets.CPI_USER }}"
       password: "${{ secrets.CPI_PASS }}"
+      artifactId: "demo_Iflow"   # iFlow package name
+      packageId: "DEMO_PACKAGE" # Package name in Integration Suite
+      filePath: "demo_Iflow"
+
+  
+  # 7. Deploy to Prod (manual approval before)
+  - name: "Deploy iFlow - Prod"
+    type: "integrationSuiteDeploy"
+    parameters:
+      host: "https://<dev-tenant>.integration-suite.cfapps.<region>.hana.ondemand.com"
+      username: "${{ secrets.CPI_USER }}"
+      password: "${{ secrets.CPI_PASS }}"
+      artifactId: "demo_Iflow"   # iFlow package name
+      packageId: "DEMO_PACKAGE" # Package name in Integration Suite
+      filePath: "demo_Iflow"
+    approvals:
+      - type: "manual"
+        approvers: ["release.manager@example.com"]
