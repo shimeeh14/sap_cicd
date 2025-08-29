@@ -1,1 +1,26 @@
-buildTool: maven
+---
+general:
+  buildTool: "maven"
+  chartPath: "gen/chart"
+service:
+  buildToolVersion: "MVNJ21"
+stages:
+  - name: "Checkout"
+    type: "git"
+    repo: "https://github.com/shimeeh14/sap_cicd.git"
+    branch: "main"
+
+  - name: "Build"
+    type: "maven"
+    command: "mvn clean install"
+
+  - name: "Unit Tests"
+    type: "maven"
+    command: "mvn test"
+
+  - name: "Deploy to Dev"
+    type: "integrationSuiteDeploy"
+    parameters:
+      host: "https://dev-i77t4c8n.integrationsuite-trial.cfapps.us10-001.hana.ondemand.com/"
+      username: "${{ secrets.CPI_USER }}"
+      password: "${{ secrets.CPI_PASS }}"
