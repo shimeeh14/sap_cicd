@@ -17,7 +17,7 @@ stages:
     type: "maven"
     mavenGoals: "clean install"
     workingDirectory: "iflows/customer-order"
-    dockerImage: "maven:3.9.4-eclipse-temurin-17"  # ensure Java 17 if Groovy scripts need it
+    # dockerImage: "maven:3.9.4-eclipse-temurin-17"  # ensure Java 17 if Groovy scripts need it
 
   # 3. Unit Tests (Groovy / Java tests)
   - name: "Unit Tests"
