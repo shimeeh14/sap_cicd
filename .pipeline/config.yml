@@ -9,7 +9,14 @@ stages:
       repo: "https://github.com/shimeeh14/sap_cicd.git"
       branch: "main"
       credentialsId: "github"
+      
+  # disable build stage completely
+  Build:
+    runStage: false
 
+  # Unit tests stage (optional, skip if no tests)
+  Tests:
+    runStage: false
 
 
   DeployDev:
