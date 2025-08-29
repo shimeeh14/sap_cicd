@@ -10,10 +10,6 @@ stages:
       branch: "main"
       credentialsId: "github"
 
-  Build:
-    mavenExecute:
-      goals: "clean install"
-      workingDirectory: "demo_Iflow"
 
 
   DeployDev:
