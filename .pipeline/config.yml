@@ -1,11 +1,7 @@
 
 general:
-  buildTool: "maven"
-  chartPath: "gen/chart"
+  buildTool: "none"
   verbose: true
-  
-service:
-  buildToolVersion: "MVNJ21"
   
 stages:
   Init:
