@@ -2,6 +2,7 @@
 general:
   buildTool: "none"
   verbose: true
+  skipBuild: true
   
 stages:
   Init:
