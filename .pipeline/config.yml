@@ -3,13 +3,6 @@ general:
   productiveBranch: 'main'
   verbose: true
   skipBuild: true
-
-steps:
-  # Disable build-related steps
-  mtaBuild:
-    active: false
-  buildExecute:
-    active: false
     
 stages:
   Init:
