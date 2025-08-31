@@ -7,9 +7,6 @@ steps:
   buildExecute:
     active: false   # 🚀 disables buildExecute step completely
 
-  mtaBuild:
-    active: false   # (optional) also disable mta build if present
-
   cpiUpload:
     host: 'https://dev-i77t4c8n.integrationsuite-trial.cfapps.us10-001.hana.ondemand.com'
     credentialsId: 'prod-user'   # Jenkins credential (username+password or API key)
