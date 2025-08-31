@@ -5,7 +5,11 @@ general:
 
 steps:
   buildExecute:
-    active: false   # 🚀 disables buildExecute step completely
+    active: false     # disable build
+  mtaBuild:
+    active: false     # disable MTA build
+  artifactPrepareVersion:
+    active: false     # disable version step (requires mta.yaml)
 
   cpiUpload:
     host: 'https://dev-i77t4c8n.integrationsuite-trial.cfapps.us10-001.hana.ondemand.com'
